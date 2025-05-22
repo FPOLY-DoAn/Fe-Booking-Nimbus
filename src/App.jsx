@@ -1,10 +1,11 @@
 import './App.css';
+import { useTitle } from './hooks';
 
 const App = () => {
+  useTitle('Booking Nimbus');
   return (
     <div className="content">
-      <h1>Rsbuild with React</h1>
-      <p>Start building amazing things with Rsbuild.</p>
+      <h1>Welcome to Booking Care Nimbus</h1>
     </div>
   );
 };
