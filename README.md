@@ -16,13 +16,12 @@ A modern medical booking platform built with ⚛️ React and ⚡️pnpm — dev
 ---
 
 ## 🚀 Getting Started
-## Setup
 
-Install the dependencies:
-
+### Install package:
 ```bash
 pnpm install
 ```
+### Run server
 ```bash
 pnpm dev
 ```
