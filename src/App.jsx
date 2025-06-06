@@ -1,12 +1,14 @@
-import './App.css';
+// import './App.css';
 import { useTitle } from './hooks';
+import AppRoutes from './routes/AppRoutes';
 
 const App = () => {
   useTitle('Booking Nimbus');
   return (
-    <div className="content">
-      <h1>Welcome to Booking Care Nimbus</h1>
-    </div>
+    <>
+      <AppRoutes/>
+    </>
+
   );
 };
 
