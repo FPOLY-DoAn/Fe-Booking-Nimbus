@@ -32,7 +32,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   borderRadius: 16,
 }));
 
-const LoginContainer = styled(Stack)(({ theme }) => ({
+const RegisterContainer = styled(Stack)(({ theme }) => ({
   height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
   minHeight: '100%',
   padding: theme.spacing(2),
@@ -55,18 +55,16 @@ const LoginContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function Login() {
+export default function Register() {
   const [phoneNumberError, setphoneNumberError] = useState(false);
   const [phoneNumberErrorMessage, setphoneNumberErrorMessage] = useState('');
-  const [passwordError, setPasswordError] = useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleSubmit = (event) => {
-    if (phoneNumberError || passwordError) {
+    if (phoneNumberError) {
       event.preventDefault();
       return;
     }
@@ -79,7 +77,6 @@ export default function Login() {
 
   const validateInputs = () => {
     const phoneNumber = document.getElementById('phoneNumber');
-    const password = document.getElementById('password');
 
     let isValid = true;
 
@@ -95,22 +92,13 @@ export default function Login() {
       setphoneNumberErrorMessage('');
     }
 
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
-
     return isValid;
   };
 
   return (
     <>
       <CssBaseline enableColorScheme />
-      <LoginContainer direction="column" justifyContent="space-between">
+      <RegisterContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Typography
             component="h1"
@@ -121,7 +109,7 @@ export default function Login() {
               textAlign: 'center',
             }}
           >
-            Đăng nhập
+            Đăng ký
           </Typography>
           <Box
             component="form"
@@ -150,51 +138,25 @@ export default function Login() {
                 color={phoneNumberError ? 'error' : 'primary'}
               />
             </FormControl>
-            <FormControl>
-              <TextField
-                error={passwordError}
-                helperText={passwordErrorMessage}
-                name="password"
-                label="Mật khẩu"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                required
-                fullWidth
-                variant="outlined"
-                color={passwordError ? 'error' : 'primary'}
-              />
-            </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Nhớ mật khẩu"
-            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               onClick={validateInputs}
             >
-              Đăng nhập
+              Đăng ký
             </Button>
-            <Link
-              component="button"
-              type="button"
-              onClick={handleClickOpen}
-              variant="body2"
-              sx={{ alignSelf: 'center' }}
-            >
-              Quên mật khẩu?
-            </Link>
           </Box>
-          <Typography sx={{ textAlign: 'center' }}>
-            Chưa có tài khoản?{' '}
-            <Link to="/register" variant="body2" sx={{ alignSelf: 'center' }}>
-              Tạo tài khoản
-            </Link>
-          </Typography>
+          <Box>
+            <Typography sx={{ textAlign: 'center' }}>
+              Đã tài khoản?{' '}
+              <Link to="/login" variant="body2" sx={{ alignSelf: 'center' }}>
+                Đăng nhập
+              </Link>
+            </Typography>
+          </Box>
         </Card>
-      </LoginContainer>
+      </RegisterContainer>
     </>
   );
 }
