@@ -4,13 +4,13 @@ import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import { Link } from 'react-router';
+import { CustomeTextField } from '../../components';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -31,6 +31,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }),
   borderRadius: 16,
 }));
+
 
 const RegisterContainer = styled(Stack)(({ theme }) => ({
   height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
@@ -55,7 +56,7 @@ const RegisterContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function Register() {
+const Register = () => {
   const [phoneNumberError, setphoneNumberError] = useState(false);
   const [phoneNumberErrorMessage, setphoneNumberErrorMessage] = useState('');
 
@@ -123,7 +124,7 @@ export default function Register() {
             }}
           >
             <FormControl>
-              <TextField
+              <CustomeTextField
                 error={phoneNumberError}
                 helperText={phoneNumberErrorMessage}
                 id="phoneNumber"
@@ -160,3 +161,4 @@ export default function Register() {
     </>
   );
 }
+export default Register;

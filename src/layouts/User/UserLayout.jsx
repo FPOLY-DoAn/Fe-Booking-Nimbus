@@ -1,10 +1,9 @@
-import { Link } from 'react-router';
+import { HeaderHome } from '../../components';
 
 const UserLayout = ({ children }) => {
   return (
     <>
-      <header>Header </header>
-      <Link to="/login">Login</Link>
+      <HeaderHome />
       <main>{children}</main>
       <footer>Footer </footer>
     </>

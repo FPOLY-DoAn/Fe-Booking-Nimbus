@@ -1,4 +1,4 @@
-// import './App.css';
+import './App.css';
 import { useTitle } from './hooks';
 import AppRoutes from './routes/AppRoutes';
 

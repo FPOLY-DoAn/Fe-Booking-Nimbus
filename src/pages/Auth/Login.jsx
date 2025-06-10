@@ -1,16 +1,17 @@
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+// import Box from '@mui/material/Box';
+// import  from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import { Link } from 'react-router';
+import { CustomeTextField } from '../../components';
+import { Avatar, Box, Button } from '@mui/material';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -55,7 +56,7 @@ const LoginContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function Login() {
+const Login= () => {
   const [phoneNumberError, setphoneNumberError] = useState(false);
   const [phoneNumberErrorMessage, setphoneNumberErrorMessage] = useState('');
   const [passwordError, setPasswordError] = useState(false);
@@ -112,6 +113,7 @@ export default function Login() {
       <CssBaseline enableColorScheme />
       <LoginContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
+          <Avatar src='https://avatars.githubusercontent.com/u/148553676?v=4'/>
           <Typography
             component="h1"
             variant="h4"
@@ -135,7 +137,7 @@ export default function Login() {
             }}
           >
             <FormControl>
-              <TextField
+              <CustomeTextField
                 error={phoneNumberError}
                 helperText={phoneNumberErrorMessage}
                 id="phoneNumber"
@@ -151,7 +153,7 @@ export default function Login() {
               />
             </FormControl>
             <FormControl>
-              <TextField
+              <CustomeTextField
                 error={passwordError}
                 helperText={passwordErrorMessage}
                 name="password"
@@ -198,3 +200,4 @@ export default function Login() {
     </>
   );
 }
+export default Login;
