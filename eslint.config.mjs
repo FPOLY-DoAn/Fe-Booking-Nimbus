@@ -23,6 +23,7 @@ export default [
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      parser: '@babel/eslint-parser',
     },
   },
   { ignores: ['dist/'] },

@@ -13,6 +13,11 @@ const routes = [
         Layout: AuthLayout
     },
     {
+        path:'/register',
+        Component: lazy(() => import('../pages/Auth/Register')),
+        Layout: AuthLayout
+    },
+    {
         path:'/admin',
         Component: lazy(() => import('../pages/Admin/AdminPage')),
         Layout: AdminLayout

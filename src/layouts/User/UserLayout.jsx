@@ -1,11 +1,13 @@
-const UserLayout = ({children}) => {
+import { HeaderHome } from '../../components';
+
+const UserLayout = ({ children }) => {
   return (
     <>
-      <header>Header </header>
+      <HeaderHome />
       <main>{children}</main>
       <footer>Footer </footer>
     </>
   );
-}
+};
 
-export default UserLayout
+export default UserLayout;

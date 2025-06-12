@@ -1,5 +1,5 @@
-// import Box from '@mui/material/Box';
-// import  from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -11,7 +11,6 @@ import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { CustomeTextField } from '../../components';
-import { Avatar, Box, Button } from '@mui/material';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -33,7 +32,8 @@ const Card = styled(MuiCard)(({ theme }) => ({
   borderRadius: 16,
 }));
 
-const LoginContainer = styled(Stack)(({ theme }) => ({
+
+const RegisterContainer = styled(Stack)(({ theme }) => ({
   height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
   minHeight: '100%',
   padding: theme.spacing(2),
@@ -56,18 +56,16 @@ const LoginContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-const Login= () => {
+const Register = () => {
   const [phoneNumberError, setphoneNumberError] = useState(false);
   const [phoneNumberErrorMessage, setphoneNumberErrorMessage] = useState('');
-  const [passwordError, setPasswordError] = useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleSubmit = (event) => {
-    if (phoneNumberError || passwordError) {
+    if (phoneNumberError) {
       event.preventDefault();
       return;
     }
@@ -80,7 +78,6 @@ const Login= () => {
 
   const validateInputs = () => {
     const phoneNumber = document.getElementById('phoneNumber');
-    const password = document.getElementById('password');
 
     let isValid = true;
 
@@ -96,24 +93,14 @@ const Login= () => {
       setphoneNumberErrorMessage('');
     }
 
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
-
     return isValid;
   };
 
   return (
     <>
       <CssBaseline enableColorScheme />
-      <LoginContainer direction="column" justifyContent="space-between">
+      <RegisterContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
-          <Avatar src='https://avatars.githubusercontent.com/u/148553676?v=4'/>
           <Typography
             component="h1"
             variant="h4"
@@ -123,7 +110,7 @@ const Login= () => {
               textAlign: 'center',
             }}
           >
-            Đăng nhập
+            Đăng ký
           </Typography>
           <Box
             component="form"
@@ -152,52 +139,26 @@ const Login= () => {
                 color={phoneNumberError ? 'error' : 'primary'}
               />
             </FormControl>
-            <FormControl>
-              <CustomeTextField
-                error={passwordError}
-                helperText={passwordErrorMessage}
-                name="password"
-                label="Mật khẩu"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                required
-                fullWidth
-                variant="outlined"
-                color={passwordError ? 'error' : 'primary'}
-              />
-            </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Nhớ mật khẩu"
-            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               onClick={validateInputs}
             >
-              Đăng nhập
+              Đăng ký
             </Button>
-            <Link
-              component="button"
-              type="button"
-              onClick={handleClickOpen}
-              variant="body2"
-              sx={{ alignSelf: 'center' }}
-            >
-              Quên mật khẩu?
-            </Link>
           </Box>
-          <Typography sx={{ textAlign: 'center' }}>
-            Chưa có tài khoản?{' '}
-            <Link to="/register" variant="body2" sx={{ alignSelf: 'center' }}>
-              Tạo tài khoản
-            </Link>
-          </Typography>
+          <Box>
+            <Typography sx={{ textAlign: 'center' }}>
+              Đã tài khoản?{' '}
+              <Link to="/login" variant="body2" sx={{ alignSelf: 'center' }}>
+                Đăng nhập
+              </Link>
+            </Typography>
+          </Box>
         </Card>
-      </LoginContainer>
+      </RegisterContainer>
     </>
   );
 }
-export default Login;
+export default Register;
