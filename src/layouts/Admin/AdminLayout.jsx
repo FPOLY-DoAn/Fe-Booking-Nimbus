@@ -12,7 +12,7 @@ import {
   IconButton,
 } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { Outlet, useNavigate, useLocation } from 'react-router';
@@ -31,9 +31,9 @@ const NAVIGATION_ITEMS = [
     icon: <DashboardIcon />,
   },
   {
-    path: '/admin/orders',
-    title: 'Orders',
-    icon: <ShoppingCartIcon />,
+    path: '/admin/lich-lam-viec',
+    title: 'Work Schedule',
+    icon: <CalendarMonthIcon />,
   },
 ];
 

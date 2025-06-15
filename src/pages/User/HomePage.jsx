@@ -1,14 +1,14 @@
-import Banner from "./Banner"
+import Banner from './Banner';
 
 const HomePage = () => {
   return (
-    
     <>
       <div>
-        <Banner/>
+        <Banner />
       </div>
-      HomePage</>
-  )
-}
+      HomePage
+    </>
+  );
+};
 
-export default HomePage
+export default HomePage;

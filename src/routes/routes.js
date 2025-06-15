@@ -1,5 +1,5 @@
-import { lazy } from 'react';
-import { AdminLayout, AuthLayout, UserLayout } from '../layouts';
+import { lazy } from 'react'
+import { AdminLayout, AuthLayout, UserLayout } from '../layouts'
 
 export const publicRoutes = [
   {
@@ -17,7 +17,12 @@ export const publicRoutes = [
     element: lazy(() => import('../pages/Auth/Register')),
     layout: AuthLayout,
   },
-];
+  {
+    path: '/lich-kham',
+    element: lazy(() => import('../pages/User/Appointment')),
+    layout: UserLayout,
+  },
+]
 
 export const privateRoutes = [
   {
@@ -26,8 +31,8 @@ export const privateRoutes = [
     layout: AdminLayout,
   },
   {
-    path: '/admin/orders',
-    element: lazy(() => import('../pages/Admin/LichLamViec')),
+    path: '/admin/lich-lam-viec',
+    element: lazy(() => import('../pages/Admin/WorkSchedule')),
     layout: AdminLayout,
   },
-];
+]
