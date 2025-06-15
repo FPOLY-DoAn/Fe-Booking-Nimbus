@@ -1,24 +1,38 @@
 import { Suspense } from 'react';
 import { Routes, Route } from 'react-router';
-import routes from '../constants/initialRoute';
-
-const renderRoutes = () =>
-  routes.map(({ path, Component, Layout }) => (
-    <Route
-      key={path}
-      path={path}
-      element={
-        <Layout>
-          <Component />
-        </Layout>
-      }
-    />
-  ));
+import { publicRoutes, privateRoutes } from './routes';
+import ProtectedRoute from '../components/ProtectedRoute';
+import { AdminLayout } from '../layouts';
 
 const AppRoutes = () => {
   return (
-    <Suspense fallback={'Loading......'}>
-      <Routes>{renderRoutes()}</Routes>
+    <Suspense>
+      <Routes>
+        {/* Public Routes */}
+        {publicRoutes.map(({ path, element: Element, layout: Layout }) => (
+          <Route
+            key={path}
+            path={path}
+            element={
+              <Layout>
+                <Element />
+              </Layout>
+            }
+          />
+        ))}
+
+        {/* Protected Admin Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AdminLayout />}>
+            {privateRoutes.map(({ path, element: Element }) => (
+              <Route key={path} path={path} element={<Element />} />
+            ))}
+          </Route>
+        </Route>
+
+        {/* Catch all route - 404 */}
+        <Route path="*" element={<div>404 Not Found</div>} />
+      </Routes>
     </Suspense>
   );
 };

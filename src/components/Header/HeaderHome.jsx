@@ -21,12 +21,9 @@ const NavButton = ({ to, children }) => (
   </Button>
 );
 
-
 const HeaderHome = () => {
-
-
   return (
-       <AppBar
+    <AppBar
       position="static"
       color="default"
       elevation={1}
@@ -44,8 +41,8 @@ const HeaderHome = () => {
           {/* Navigation */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
             <NavButton to="/">Home</NavButton>
-            <NavButton to="/about">About</NavButton>
-            <NavButton to="/services">Services</NavButton>
+            <NavButton to="/admin">About</NavButton>
+            <NavButton to="/admin/orders">Services</NavButton>
             <NavButton to="/blog">Blog</NavButton>
             <NavButton to="/contact">Contact</NavButton>
 
@@ -54,7 +51,7 @@ const HeaderHome = () => {
               variant="contained"
               color="primary"
               component={Link}
-              to="/quote"
+              to="/login"
               sx={{
                 textTransform: 'none',
                 borderRadius: 2,
@@ -64,13 +61,12 @@ const HeaderHome = () => {
                 fontWeight: 600,
               }}
             >
-              Get A Quote
+              Login
             </Button>
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
-  
   );
 };
 

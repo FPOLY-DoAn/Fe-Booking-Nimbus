@@ -16,11 +16,16 @@ const routes = [
         path:'/register',
         Component: lazy(() => import('../pages/Auth/Register')),
         Layout: AuthLayout
-    },
+    },  
     {
         path:'/admin',
-        Component: lazy(() => import('../pages/Admin/AdminPage')),
+        Component: lazy(() => import('../pages/Admin/Dashboard')),
         Layout: AdminLayout
-    }
+    },
+    {
+        path:'/admin/orders',
+        Component: lazy(() => import('../pages/Admin/LichLamViec')),
+        Layout: AdminLayout
+    },
 ]
 export default routes;
