@@ -1,8 +1,9 @@
-import { Suspense } from 'react';
-import { Routes, Route } from 'react-router';
-import { publicRoutes, privateRoutes } from './routes';
-import ProtectedRoute from '../components/ProtectedRoute';
-import { AdminLayout } from '../layouts';
+import { Suspense } from 'react'
+import { Routes, Route } from 'react-router'
+import ProtectedRoute from '../components/ProtectedRoute'
+import { AdminLayout } from '../layouts'
+import { publicRoutes, privateRoutes } from '../constants/initialRoute'
+import NotFound from '../components/NotFound'
 
 const AppRoutes = () => {
   return (
@@ -31,10 +32,10 @@ const AppRoutes = () => {
         </Route>
 
         {/* Catch all route - 404 */}
-        <Route path="*" element={<div>404 Not Found</div>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
-  );
-};
+  )
+}
 
-export default AppRoutes;
+export default AppRoutes

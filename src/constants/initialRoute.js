@@ -1,36 +1,38 @@
-import { lazy } from 'react';
-import { AdminLayout, AuthLayout, UserLayout } from '../layouts';
+import { lazy } from 'react'
+import { AdminLayout, AuthLayout, UserLayout } from '../layouts'
 
-const routes = [
+export const publicRoutes = [
   {
     path: '/',
-    Component: lazy(() => import('../pages/User/HomePage')),
-    Layout: UserLayout,
+    element: lazy(() => import('../pages/User/HomePage')),
+    layout: UserLayout,
   },
   {
     path: '/login',
-    Component: lazy(() => import('../pages/Auth/Login')),
-    Layout: AuthLayout,
+    element: lazy(() => import('../pages/Auth/Login')),
+    layout: AuthLayout,
   },
   {
     path: '/register',
-    Component: lazy(() => import('../pages/Auth/Register')),
-    Layout: AuthLayout,
-  },
-  {
-    path: '/admin',
-    Component: lazy(() => import('../pages/Admin/Dashboard')),
-    Layout: AdminLayout,
-  },
-  {
-    path: '/admin/lich-lam-viec',
-    Component: lazy(() => import('../pages/Admin/WorkSchedule')),
-    Layout: AdminLayout,
+    element: lazy(() => import('../pages/Auth/Register')),
+    layout: AuthLayout,
   },
   {
     path: '/lich-kham',
-    Component: lazy(() => import('../pages/User/Appointment')),
-    Layout: UserLayout,
+    element: lazy(() => import('../pages/User/Appointment')),
+    layout: UserLayout,
   },
-];
-export default routes;
+]
+
+export const privateRoutes = [
+  {
+    path: '/admin',
+    element: lazy(() => import('../pages/Admin/Dashboard')),
+    layout: AdminLayout,
+  },
+  {
+    path: '/admin/lich-lam-viec',
+    element: lazy(() => import('../pages/Admin/WorkSchedule')),
+    layout: AdminLayout,
+  },
+]
