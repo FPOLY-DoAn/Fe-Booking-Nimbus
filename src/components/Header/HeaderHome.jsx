@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { AppBar, Box, Container, Toolbar, Button } from '@mui/material';
-import logoNimbus from '../../assets/logoNimbus.png';
+import logoNimbus from '../../assets/Nimbus.png';
 
 const NavButton = ({ to, children }) => (
   <Button
@@ -21,12 +21,9 @@ const NavButton = ({ to, children }) => (
   </Button>
 );
 
-
 const HeaderHome = () => {
-
-
   return (
-       <AppBar
+    <AppBar
       position="static"
       color="default"
       elevation={1}
@@ -43,18 +40,18 @@ const HeaderHome = () => {
 
           {/* Navigation */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-            <NavButton to="/">Home</NavButton>
-            <NavButton to="/about">About</NavButton>
-            <NavButton to="/services">Services</NavButton>
-            <NavButton to="/blog">Blog</NavButton>
-            <NavButton to="/contact">Contact</NavButton>
+            <NavButton to="/">Trang chủ</NavButton>
+            <NavButton to="/lich-kham">Lịch hẹn</NavButton>
+            <NavButton to="/services">Hồ sơ</NavButton>
+            <NavButton to="/blog">Tài khoản</NavButton>
+            <NavButton to="/contact">Liên hệ</NavButton>
 
             {/* Get A Quote Button */}
             <Button
               variant="contained"
               color="primary"
               component={Link}
-              to="/quote"
+              to="/login"
               sx={{
                 textTransform: 'none',
                 borderRadius: 2,
@@ -64,13 +61,12 @@ const HeaderHome = () => {
                 fontWeight: 600,
               }}
             >
-              Get A Quote
+              Đăng nhập
             </Button>
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
-  
   );
 };
 
