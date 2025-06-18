@@ -1,50 +1,28 @@
-import { useState } from 'react';
-import { Link } from 'react-router';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import FormControl from '@mui/material/FormControl';
-import Typography from '@mui/material/Typography';
-import { AuthContainer, CardCostome, CustomeTextField } from '../../components';
-
-
+import { Link } from 'react-router'
+import { useForm } from 'react-hook-form'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import CssBaseline from '@mui/material/CssBaseline'
+import FormControl from '@mui/material/FormControl'
+import Typography from '@mui/material/Typography'
+import { AuthContainer, CardCostome, CustomeTextField } from '../../components'
+import { yupResolver } from '@hookform/resolvers/yup'
+import AuthValid from './../../validation/AuthValid'
 
 const Register = () => {
-  const [emailError, setemailError] = useState(false);
-  const [emailErrorMessage, setemailErrorMessage] = useState('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(AuthValid),
+    mode: 'onChange', // Validate ngay khi người dùng nhập
+  })
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleSubmit = (event) => {
-    if (emailError) {
-      event.preventDefault();
-      return;
-    }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
-
-  const validateInputs = () => {
-    const email = document.getElementById('email');
-
-    let isValid = true;
-
-     if (!email.value || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email.value)) {
-      setemailError(true);
-      setemailErrorMessage('Vui lòng nhập số điện thoại hợp lệ.');
-      isValid = false;
-    } else {
-      setemailError(false);
-      setemailErrorMessage('');
-    }
-
-    return isValid;
-  };
+  const onSubmit = (data) => {
+    console.log('Form data:', data)
+    // TODO: Xử lý đăng ký ở đây
+  }
 
   return (
     <>
@@ -64,8 +42,8 @@ const Register = () => {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
             noValidate
+            onSubmit={handleSubmit(onSubmit)}
             sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -75,92 +53,78 @@ const Register = () => {
           >
             <FormControl>
               <CustomeTextField
-                error={emailError}
-                helperText={emailErrorMessage}
-                id="fullName"
+                error={Boolean(errors.fullName)}
+                helperText={errors.fullName?.message}
                 type="text"
-                name="fullName"
                 label="Họ và tên"
-                autoComplete="fullName"
+                autoComplete="name"
                 autoFocus
                 required
                 fullWidth
                 variant="outlined"
-                color={emailError ? 'error' : 'primary'}
+                {...register('fullName')}
               />
             </FormControl>
             <FormControl>
               <CustomeTextField
-                error={emailError}
-                helperText={emailErrorMessage}
-                id="email"
+                error={Boolean(errors.email)}
+                helperText={errors.email?.message}
                 type="text"
-                name="email"
                 label="Email"
                 autoComplete="email"
                 required
                 fullWidth
                 variant="outlined"
-                color={emailError ? 'error' : 'primary'}
-              />
-            </FormControl><FormControl>
-              <CustomeTextField
-                error={emailError}
-                helperText={emailErrorMessage}
-                id="sdt"
-                type="text"
-                name="sdt"
-                label="Số điện thoại"
-                autoComplete="sdt"
-                required
-                fullWidth
-                variant="outlined"
-                color={emailError ? 'error' : 'primary'}
+                {...register('email')}
               />
             </FormControl>
             <FormControl>
               <CustomeTextField
-                error={emailError}
-                helperText={emailErrorMessage}
-                id="password"
-                name="password"
-                label="Mật khẩu"
-                type="password"
-                autoComplete="current-password"
+                error={Boolean(errors.sdt)}
+                helperText={errors.sdt?.message}
+                type="text"
+                label="Số điện thoại"
+                autoComplete="tel"
                 required
                 fullWidth
                 variant="outlined"
-                color={emailError ? 'error' : 'primary'}
+                {...register('sdt')}
               />
             </FormControl>
-             <FormControl>
+            <FormControl>
               <CustomeTextField
-                error={emailError}
-                helperText={emailErrorMessage}
-                name="passwordconfirm"
-                label="Xác nhận mật khẩu"
+                error={Boolean(errors.password)}
+                helperText={errors.password?.message}
+                label="Mật khẩu"
                 type="password"
-                id="passwordconfirm"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 required
                 fullWidth
                 variant="outlined"
-                color={emailError ? 'error' : 'primary'}
+                {...register('password')}
+              />
+            </FormControl>
+            <FormControl>
+              <CustomeTextField
+                error={Boolean(errors.passwordconfirm)}
+                helperText={errors.passwordconfirm?.message}
+                label="Xác nhận mật khẩu"
+                type="password"
+                autoComplete="new-password"
+                required
+                fullWidth
+                variant="outlined"
+                {...register('passwordconfirm')}
               />
             </FormControl>
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              onClick={validateInputs}
-            >
+            <Button type="submit" fullWidth variant="contained">
               Đăng ký
             </Button>
           </Box>
           <Box>
             <Typography sx={{ textAlign: 'center' }}>
-              Đã tài khoản?{' '}
+              Đã có tài khoản?{' '}
               <Link to="/login" variant="body2" sx={{ alignSelf: 'center' }}>
                 Đăng nhập
               </Link>
@@ -169,6 +133,7 @@ const Register = () => {
         </CardCostome>
       </AuthContainer>
     </>
-  );
+  )
 }
-export default Register;
+
+export default Register
