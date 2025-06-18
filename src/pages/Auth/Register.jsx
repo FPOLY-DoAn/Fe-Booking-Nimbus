@@ -1,106 +1,34 @@
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
-import { styled } from '@mui/material/styles';
-import { useState } from 'react';
-import { Link } from 'react-router';
-import { CustomeTextField } from '../../components';
-
-const Card = styled(MuiCard)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignSelf: 'center',
-  width: '100%',
-  padding: theme.spacing(4),
-  gap: theme.spacing(2),
-  margin: 'auto',
-  [theme.breakpoints.up('sm')]: {
-    maxWidth: '450px',
-  },
-  boxShadow:
-    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-  ...theme.applyStyles('dark', {
-    boxShadow:
-      'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-  }),
-  borderRadius: 16,
-}));
-
-
-const RegisterContainer = styled(Stack)(({ theme }) => ({
-  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-  minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-  },
-}));
+import { Link } from 'react-router'
+import { useForm } from 'react-hook-form'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import CssBaseline from '@mui/material/CssBaseline'
+import FormControl from '@mui/material/FormControl'
+import Typography from '@mui/material/Typography'
+import { AuthContainer, CardCostome, CustomeTextField } from '../../components'
+import { yupResolver } from '@hookform/resolvers/yup'
+import AuthValid from './../../validation/AuthValid'
 
 const Register = () => {
-  const [phoneNumberError, setphoneNumberError] = useState(false);
-  const [phoneNumberErrorMessage, setphoneNumberErrorMessage] = useState('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(AuthValid),
+    mode: 'onChange', // Validate ngay khi người dùng nhập
+  })
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleSubmit = (event) => {
-    if (phoneNumberError) {
-      event.preventDefault();
-      return;
-    }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      phoneNumber: data.get('phoneNumber'),
-      password: data.get('password'),
-    });
-  };
-
-  const validateInputs = () => {
-    const phoneNumber = document.getElementById('phoneNumber');
-
-    let isValid = true;
-
-    if (
-      !phoneNumber.value ||
-      !/^(03|05|07|08|09)\d{8}$/.test(phoneNumber.value)
-    ) {
-      setphoneNumberError(true);
-      setphoneNumberErrorMessage('Vui lòng nhập số điện thoại hợp lệ.');
-      isValid = false;
-    } else {
-      setphoneNumberError(false);
-      setphoneNumberErrorMessage('');
-    }
-
-    return isValid;
-  };
+  const onSubmit = (data) => {
+    console.log('Form data:', data)
+    // TODO: Xử lý đăng ký ở đây
+  }
 
   return (
     <>
       <CssBaseline enableColorScheme />
-      <RegisterContainer direction="column" justifyContent="space-between">
-        <Card variant="outlined">
+      <AuthContainer direction="column" justifyContent="space-between">
+        <CardCostome variant="outlined">
           <Typography
             component="h1"
             variant="h4"
@@ -114,8 +42,8 @@ const Register = () => {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
             noValidate
+            onSubmit={handleSubmit(onSubmit)}
             sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -125,40 +53,87 @@ const Register = () => {
           >
             <FormControl>
               <CustomeTextField
-                error={phoneNumberError}
-                helperText={phoneNumberErrorMessage}
-                id="phoneNumber"
+                error={Boolean(errors.fullName)}
+                helperText={errors.fullName?.message}
                 type="text"
-                name="phoneNumber"
-                label="Số điện thoại"
-                autoComplete="phoneNumber"
+                label="Họ và tên"
+                autoComplete="name"
                 autoFocus
                 required
                 fullWidth
                 variant="outlined"
-                color={phoneNumberError ? 'error' : 'primary'}
+                {...register('fullName')}
               />
             </FormControl>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              onClick={validateInputs}
-            >
+            <FormControl>
+              <CustomeTextField
+                error={Boolean(errors.email)}
+                helperText={errors.email?.message}
+                type="text"
+                label="Email"
+                autoComplete="email"
+                required
+                fullWidth
+                variant="outlined"
+                {...register('email')}
+              />
+            </FormControl>
+            <FormControl>
+              <CustomeTextField
+                error={Boolean(errors.sdt)}
+                helperText={errors.sdt?.message}
+                type="text"
+                label="Số điện thoại"
+                autoComplete="tel"
+                required
+                fullWidth
+                variant="outlined"
+                {...register('sdt')}
+              />
+            </FormControl>
+            <FormControl>
+              <CustomeTextField
+                error={Boolean(errors.password)}
+                helperText={errors.password?.message}
+                label="Mật khẩu"
+                type="password"
+                autoComplete="new-password"
+                required
+                fullWidth
+                variant="outlined"
+                {...register('password')}
+              />
+            </FormControl>
+            <FormControl>
+              <CustomeTextField
+                error={Boolean(errors.passwordconfirm)}
+                helperText={errors.passwordconfirm?.message}
+                label="Xác nhận mật khẩu"
+                type="password"
+                autoComplete="new-password"
+                required
+                fullWidth
+                variant="outlined"
+                {...register('passwordconfirm')}
+              />
+            </FormControl>
+
+            <Button type="submit" fullWidth variant="contained">
               Đăng ký
             </Button>
           </Box>
           <Box>
             <Typography sx={{ textAlign: 'center' }}>
-              Đã tài khoản?{' '}
+              Đã có tài khoản?{' '}
               <Link to="/login" variant="body2" sx={{ alignSelf: 'center' }}>
                 Đăng nhập
               </Link>
             </Typography>
           </Box>
-        </Card>
-      </RegisterContainer>
+        </CardCostome>
+      </AuthContainer>
     </>
-  );
+  )
 }
-export default Register;
+
+export default Register

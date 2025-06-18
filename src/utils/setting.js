@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-// const DOMAIN = 'https://movieapi.cyberlearn.vn/api'
+
+// const baseURL = 'http://localhost:2615'
 const ACESS_TOKEN = 'access_token'
 
 const commonSettings = {
@@ -114,7 +115,7 @@ const commonSettings = {
 };
 
 const httpClient = axios.create({
-    baseURL: DOMAIN,
+    baseURL: baseURL,
     timeout: 3000
 })
 
@@ -151,6 +152,7 @@ httpClient.interceptors.response.use((response) => {
 });
 
 export {
+    baseURL,
     ACESS_TOKEN,
     commonSettings,
     httpClient
