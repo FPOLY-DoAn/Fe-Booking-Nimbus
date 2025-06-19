@@ -11,7 +11,9 @@ import {
   Typography,
   TextField,
   Button,
+  InputLabel,
 } from '@mui/material';
+import Tabs from '../../components/Tab';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
@@ -25,15 +27,19 @@ const Item = styled(Paper)(({ theme }) => ({
   marginBottom: 2,
 }));
 
-const Form = styled(FormControl)(() => ({
+const Form = styled('form')(() => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
 }));
+const StyledFormControl = styled(FormControl)(() => ({
+  marginBottom: 8,
+  width: 500,
+}));
 
 const StyledSelect = styled(Select)(({ theme }) => ({
   borderRadius: 8,
-  minWidth: 500,
+  minWidth: '100%',
   margin: '0 auto',
   textAlign: 'center',
   '& .MuiSelect-select': {
@@ -76,6 +82,7 @@ const MyButton = styled(Button)(({ theme }) => ({
   color: 'black',
   marginBottom: 10,
 }));
+
 const specialtyOptions = [
   {
     value: 'khoaTamThan',
@@ -95,6 +102,12 @@ const specialtyOptions = [
   },
 ];
 
+const doctor = [
+  { value: '1', label: 'Dr. Nguyễn A' },
+  { value: '2', label: 'Dr. Nguyễn B' },
+  { value: '3', label: 'Dr. Nguyễn C' },
+];
+
 export default function Appointment() {
   const [serviceType, setServiceType] = React.useState('');
   const [specialty, setSpecialty] = React.useState('');
@@ -109,73 +122,87 @@ export default function Appointment() {
   );
 
   return (
-    <Box sx={{ flexGrow: 2, margin: 2 }}>
+    <Box
+      sx={{
+        flexGrow: 2,
+        margin: 2,
+        marginTop: 4,
+        fontFamily: 'Times New Roman',
+      }}
+    >
       <Grid container spacing={2} columns={12}>
         <Grid size={6}>
-          <Form>
-            <Label variant="h6" sx={{ marginInlineStart: -39 }}>
-              1. Chọn loại hình khám
-            </Label>
-            <StyledSelect
-              value={serviceType}
-              onChange={(e) => setServiceType(e.target.value)}
-              variant="outlined"
-              fullWidth={false}
-            >
-              {serviceTypeOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </StyledSelect>
-
-            <Label variant="h6" sx={{ marginInlineStart: -37.5 }}>
-              2. Chọn chuyên khoa
-            </Label>
-            <StyledSelect
-              value={specialty}
-              onChange={(e) => setSpecialty(e.target.value)}
-              variant="outlined"
-              fullWidth={false}
-            >
-              {specialtyOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </StyledSelect>
-
-            <Label variant="h6" sx={{ marginInlineStart: -37.5 }}>
-              3. Chọn theo nhu cầu
-            </Label>
-
-            <Label variant="h6" sx={{ marginInlineStart: -44.5 }}>
-              4. Nhập vấn đề
-            </Label>
-            <TextField
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              sx={{ minWidth: 500 }}
-            />
-            <Label variant="h6" sx={{ marginInlineStart: -35.5 }}>
-              5. Hình thức thanh toán
-            </Label>
-            <MyButton>
-              <img
-                src={logoNimbus}
-                alt="Logo"
-                style={{ height: 90, marginInlineEnd: 100, margin: 40 }}
+          <Form onSubmit={handleSubmit}>
+            <StyledFormControl sx={{ marginTop: 4 }}>
+              <InputLabel id="service-type-label">1.Loại hình khám</InputLabel>
+              <StyledSelect
+                value={serviceType}
+                labelId="service-type-label"
+                label="1.Loại hình khám"
+                onChange={(e) => setServiceType(e.target.value)}
+                variant="outlined"
+                fullWidth={false}
+              >
+                {serviceTypeOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </StyledSelect>
+            </StyledFormControl>
+            <StyledFormControl>
+              <InputLabel id="specialty-label">2.Chuyên khoa</InputLabel>
+              <StyledSelect
+                value={specialty}
+                labelId="specialty-label"
+                label="2.Chuyên khoa"
+                onChange={(e) => setSpecialty(e.target.value)}
+                variant="outlined"
+                fullWidth={false}
+              >
+                {specialtyOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </StyledSelect>
+            </StyledFormControl>
+            <StyledFormControl>
+              <InputLabel>3. Chọn theo nhu cầu</InputLabel>
+              <Box sx={{ mt: 4.2 }}>
+                <Tabs />
+              </Box>
+            </StyledFormControl>
+            <StyledFormControl>
+              <TextField
+                id="note-textField"
+                label="4. Nhập vấn đề"
+                variant="outlined"
+                fullWidth={false}
+                onChange={(e) => setNote(e.target.value)}
               />
-              MOMO
-            </MyButton>
-            <MyButton>
-              <img
-                src={logoNimbus}
-                alt="Logo"
-                style={{ height: 90, marginInlineEnd: 100, margin: 40 }}
-              />
-              Thanh toán tại quầy
-            </MyButton>
+            </StyledFormControl>
+            <StyledFormControl>
+              <InputLabel>5. Phương thức thanh toán</InputLabel>
+              <Box sx={{ mt: 6 }}>
+                <MyButton>
+                  <img
+                    src={logoNimbus}
+                    alt="Logo"
+                    style={{ height: 90, marginInlineEnd: 100, margin: 40 }}
+                  />
+                  MOMO
+                </MyButton>
+                <MyButton>
+                  <img
+                    src={logoNimbus}
+                    alt="Logo"
+                    style={{ height: 90, marginInlineEnd: 100, margin: 40 }}
+                  />
+                  Thanh toán tại quầy
+                </MyButton>
+              </Box>
+            </StyledFormControl>
           </Form>
         </Grid>
         <Grid size={6}>

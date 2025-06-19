@@ -7,7 +7,7 @@ const NavButton = ({ to, children }) => (
     component={Link}
     to={to}
     sx={{
-      color: '#333',
+      color: 'white',
       textTransform: 'none',
       fontSize: '16px',
       fontWeight: 500,
@@ -27,7 +27,7 @@ const HeaderHome = () => {
       position="static"
       color="default"
       elevation={1}
-      sx={{ backgroundColor: 'white' }}
+      sx={{ backgroundColor: '#6ec2f7' }}
     >
       <Container>
         <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
