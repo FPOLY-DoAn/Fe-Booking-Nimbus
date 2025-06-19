@@ -68,6 +68,44 @@ const HeaderHome = () => {
     navigate('/')
   }
 
+  const renderUserMenu = () => (
+    <Menu
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={handleClose}
+      PaperProps={{
+        sx: {
+          mt: 1,
+          width: 250,
+          borderRadius: 2,
+          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
+        },
+      }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      disablePortal
+    >
+      <MenuItem
+        onClick={handleClose}
+        component={Link}
+        to="/profile"
+        sx={{ gap: 2 }}
+      >
+        <ListItemIcon>
+          <PersonIcon fontSize="small" />
+        </ListItemIcon>
+        Thông tin cá nhân
+      </MenuItem>
+      <Divider />
+      <MenuItem onClick={handleLogout} sx={{ gap: 2, color: 'error.main' }}>
+        <ListItemIcon>
+          <LogoutIcon fontSize="small" color="error" />
+        </ListItemIcon>
+        Đăng xuất
+      </MenuItem>
+    </Menu>
+  )
+
   return (
     <AppBar
       position="static"
@@ -106,7 +144,7 @@ const HeaderHome = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 1,
-                    px: 1, // hoặc px: 0 nếu bạn cần chính xác
+                    px: 1,
                     minWidth: 'unset',
                     '&:hover': {
                       color: '#1976d2',
@@ -126,41 +164,7 @@ const HeaderHome = () => {
                   </Avatar>
                   {user.hoten || 'User'}
                 </Button>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                  PaperProps={{
-                    sx: {
-                      mt: 1,
-                      width: 250,
-                    },
-                  }}
-                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                >
-                  <MenuItem
-                    onClick={handleClose}
-                    component={Link}
-                    to="/profile"
-                    sx={{ gap: 2 }}
-                  >
-                    <ListItemIcon>
-                      <PersonIcon fontSize="small" />
-                    </ListItemIcon>
-                    Thông tin cá nhân
-                  </MenuItem>
-                  <Divider />
-                  <MenuItem
-                    onClick={handleLogout}
-                    sx={{ gap: 2, color: 'error.main' }}
-                  >
-                    <ListItemIcon>
-                      <LogoutIcon fontSize="small" color="error" />
-                    </ListItemIcon>
-                    Đăng xuất
-                  </MenuItem>
-                </Menu>
+                {renderUserMenu()}
               </>
             ) : (
               <Button

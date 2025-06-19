@@ -11,7 +11,11 @@ const LoginService = async (email, matKhau) => {
     console.log(response.data)
     return response.data
   }catch(error){
-    throw error.response?.data || error.message
+    console.log('Error details:', {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+    })
   }
 }
 

@@ -28,15 +28,15 @@ const Login = () => {
     try {
       const response = await LoginService(data.email, data.password)
       const decoded = jwtDecode(response)
-    console.log('Thông tin giải mã:', decoded)
-    console.log('Họ tên:', decoded.hoten)
+    // console.log('Thông tin giải mã:', decoded)
+    // console.log('Họ tên:', decoded.hoten)
       // Lưu token và thông tin user vào localStorage
       localStorage.setItem('token', response) 
       localStorage.setItem(
         'user',
         JSON.stringify({
           email: data.email,
-          hoten: decoded.hoten || 'User', // Sử dụng hoten từ response hoặc giá trị mặc định
+          hoten: decoded.hoten || 'User', 
         })
       )
       navigate('/')

@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -10,27 +11,40 @@ import InputLabel from '@mui/material/InputLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import Typography from '@mui/material/Typography'
 import { AuthContainer, CardCostome, CustomeTextField } from '../../components'
-import { yupResolver } from '@hookform/resolvers/yup'
 import { registerSchema } from './../../validation/AuthValid'
-import { register as registerApi } from '../../services/RegisterService'
+import RegisterService from '../../services/RegisterService'
 
 const Register = () => {
   const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    control,
   } = useForm({
     resolver: yupResolver(registerSchema),
-    mode: 'onChange', // Validate ngay khi người dùng nhập
+    mode: 'onChange', 
+    defaultValues: {
+      gender: '', 
+    },
   })
+
   const onSubmit = async (data) => {
     try {
-      await registerApi(data)
+      const response = await RegisterService(
+        data.fullName,
+        data.email,
+        data.password,
+        data.sdt,
+        data.gender
+      )
+      console.log('Registration successful:', response)
+      alert('Đăng ký thành công! Vui lòng đăng nhập.')
       navigate('/login')
     } catch (error) {
       console.error('Registration error:', error)
-      // TODO: Hiển thị thông báo lỗi cho người dùng
+      alert(error.message || 'Đăng ký thất bại. Vui lòng thử lại.')
     }
   }
 
@@ -75,23 +89,22 @@ const Register = () => {
                 {...register('fullName')}
               />
             </FormControl>
-
             <FormControl error={Boolean(errors.gender)} fullWidth>
               <InputLabel id="gender-label">Giới tính *</InputLabel>
-              <Select
-                labelId="gender-label"
-                label="Giới tính *"
-                defaultValue=""
-                {...register('gender')}
-              >
-                <MenuItem value="M">Nam</MenuItem>
-                <MenuItem value="F">Nữ</MenuItem>
-              </Select>
+              <Controller
+                name="gender"
+                control={control}
+                render={({ field }) => (
+                  <Select {...field} labelId="gender-label" label="Giới tính *">
+                    <MenuItem value="M">Nam</MenuItem>
+                    <MenuItem value="F">Nữ</MenuItem>
+                  </Select>
+                )}
+              />
               {errors.gender && (
                 <FormHelperText>{errors.gender.message}</FormHelperText>
               )}
             </FormControl>
-
             <FormControl>
               <CustomeTextField
                 error={Boolean(errors.email)}
