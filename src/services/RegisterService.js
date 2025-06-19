@@ -1,23 +1,13 @@
 import axios from 'axios'
-
+// import { API_URL } from '../utils/setting'
 const BASE_URL = 'http://localhost:2615'
-
-export const registerService = {
-  login: async (hoTen, gioiTinh, email, matKhau, sdt) => {
-    try {
-      const response = await axios.post(`${BASE_URL}/auth/register`, {
-        hoTen,
-        gioiTinh,
-        email,
-        matKhau,
-        sdt,
-      })
-      console.log('register response:', response.data)
-      return response.data
-    } catch (error) {
-      throw error.response?.data || error.message
-    }
-  },
+const register = async (userData) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/auth/register`, userData)
+    return response.data
+  } catch (error) {
+    throw error.response.data
+  }
 }
 
-export default registerService
+export { register }

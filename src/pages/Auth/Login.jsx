@@ -7,26 +7,38 @@ import FormControl from '@mui/material/FormControl'
 import Typography from '@mui/material/Typography'
 import { AuthContainer, CardCostome, CustomeTextField } from '../../components'
 import { Box, Button } from '@mui/material'
-import { loginService } from '../../services/LoginService'
 import { yupResolver } from '@hookform/resolvers/yup'
-import AuthValid from './../../validation/AuthValid';
-
+import { loginSchema } from '../../validation/AuthValid'
+import LoginService from '../../services/LoginService'
+import {jwtDecode} from 'jwt-decode'
 
 const Login = () => {
   const navigate = useNavigate()
+
   const {
-    register,
+    register, // Hàm để đăng ký các trường input
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({
-    resolver: yupResolver(AuthValid),
+    resolver: yupResolver(loginSchema),
     mode: 'onChange',
   })
 
   const onSubmit = async (data) => {
     try {
-      const response = await loginService.login(data.email, data.password)
-      localStorage.setItem('token', response)
+      const response = await LoginService(data.email, data.password)
+      const decoded = jwtDecode(response)
+    console.log('Thông tin giải mã:', decoded)
+    console.log('Họ tên:', decoded.hoten)
+      // Lưu token và thông tin user vào localStorage
+      localStorage.setItem('token', response) 
+      localStorage.setItem(
+        'user',
+        JSON.stringify({
+          email: data.email,
+          hoten: decoded.hoten || 'User', // Sử dụng hoten từ response hoặc giá trị mặc định
+        })
+      )
       navigate('/')
       alert('Đăng nhập thành công!')
     } catch (error) {
@@ -73,7 +85,7 @@ const Login = () => {
                 required
                 fullWidth
                 variant="outlined"
-                {...register('email')}
+                {...register('email')} // tự động ánh giá trị email từ form vào đây (RHF tự động lắng nghe sự kiện thay đổi của input và cập nhật giá trị)
               />
             </FormControl>
             <FormControl>
@@ -90,7 +102,7 @@ const Login = () => {
               />
             </FormControl>
             <FormControlLabel
-              control={<Checkbox {...register('remember')} color="primary" />}
+              control={<Checkbox color="primary" />}
               label="Nhớ mật khẩu"
             />
             <Button

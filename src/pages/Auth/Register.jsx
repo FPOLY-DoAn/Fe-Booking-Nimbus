@@ -1,27 +1,37 @@
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { useForm } from 'react-hook-form'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
 import FormControl from '@mui/material/FormControl'
+import MenuItem from '@mui/material/MenuItem'
+import Select from '@mui/material/Select'
+import InputLabel from '@mui/material/InputLabel'
+import FormHelperText from '@mui/material/FormHelperText'
 import Typography from '@mui/material/Typography'
 import { AuthContainer, CardCostome, CustomeTextField } from '../../components'
 import { yupResolver } from '@hookform/resolvers/yup'
-import AuthValid from './../../validation/AuthValid'
+import { registerSchema } from './../../validation/AuthValid'
+import { register as registerApi } from '../../services/RegisterService'
 
 const Register = () => {
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(AuthValid),
+    resolver: yupResolver(registerSchema),
     mode: 'onChange', // Validate ngay khi người dùng nhập
   })
-
-  const onSubmit = (data) => {
-    console.log('Form data:', data)
-    // TODO: Xử lý đăng ký ở đây
+  const onSubmit = async (data) => {
+    try {
+      await registerApi(data)
+      navigate('/login')
+    } catch (error) {
+      console.error('Registration error:', error)
+      // TODO: Hiển thị thông báo lỗi cho người dùng
+    }
   }
 
   return (
@@ -51,7 +61,7 @@ const Register = () => {
               gap: 2,
             }}
           >
-            <FormControl>
+            <FormControl error={Boolean(errors.fullName)}>
               <CustomeTextField
                 error={Boolean(errors.fullName)}
                 helperText={errors.fullName?.message}
@@ -65,6 +75,23 @@ const Register = () => {
                 {...register('fullName')}
               />
             </FormControl>
+
+            <FormControl error={Boolean(errors.gender)} fullWidth>
+              <InputLabel id="gender-label">Giới tính *</InputLabel>
+              <Select
+                labelId="gender-label"
+                label="Giới tính *"
+                defaultValue=""
+                {...register('gender')}
+              >
+                <MenuItem value="M">Nam</MenuItem>
+                <MenuItem value="F">Nữ</MenuItem>
+              </Select>
+              {errors.gender && (
+                <FormHelperText>{errors.gender.message}</FormHelperText>
+              )}
+            </FormControl>
+
             <FormControl>
               <CustomeTextField
                 error={Boolean(errors.email)}
