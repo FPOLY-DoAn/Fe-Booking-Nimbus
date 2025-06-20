@@ -21,11 +21,8 @@
     "@mui/x-date-pickers": "^8.5.2",
     "@toolpad/core": "^0.15.0",
     "axios": "^1.9.0",
-<<<<<<< HEAD
     "dayjs": "^1.11.13",
-=======
     "jwt-decode": "^4.0.0",
->>>>>>> 6538a2e4a1465d25f9baa9885416f655d1109576
     "lodash": "^4.17.21",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
