@@ -15,18 +15,6 @@ import {
 } from '@mui/material';
 import Tabs from '../../components/Tab';
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: (theme.vars ?? theme).palette.text.secondary,
-  ...theme.applyStyles('dark', {
-    backgroundColor: '#1A2027',
-  }),
-  marginBottom: 2,
-}));
-
 const Form = styled('form')(() => ({
   display: 'flex',
   flexDirection: 'column',
@@ -102,11 +90,6 @@ const specialtyOptions = [
   },
 ];
 
-const doctor = [
-  { value: '1', label: 'Dr. Nguyễn A' },
-  { value: '2', label: 'Dr. Nguyễn B' },
-  { value: '3', label: 'Dr. Nguyễn C' },
-];
 
 export default function Appointment() {
   const [serviceType, setServiceType] = React.useState('');
