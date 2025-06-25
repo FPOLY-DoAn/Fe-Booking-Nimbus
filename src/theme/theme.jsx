@@ -1,19 +1,19 @@
-import { createTheme } from '@mui/material/styles';
-import { createContext, useMemo, useState } from 'react';
+import { createTheme } from '@mui/material/styles'
+import { createContext, useMemo, useState } from 'react'
 
-export const ColorModeContext = createContext({ toggleColorMode: () => {} });
+export const ColorModeContext = createContext({ toggleColorMode: () => {} })
 
 export const useMode = () => {
-  const [mode, setMode] = useState('light');
+  const [mode, setMode] = useState('light')
 
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'))
       },
     }),
-    [],
-  );
+    []
+  )
 
   const theme = useMemo(
     () =>
@@ -26,7 +26,7 @@ export const useMode = () => {
                   default: '#fff',
                   paper: '#fff',
                   hover: '#f5f5f5',
-                  icon: '#42A5F5'
+                  icon: '#42A5F5',
                 },
               }
             : {
@@ -34,15 +34,22 @@ export const useMode = () => {
                   default: '#1e1e1e',
                   paper: '#1e1e1e',
                   hover: '#2c2c2c',
-                  icon: '#42A5F5'
+                  icon: '#42A5F5',
                 },
               }),
         },
-        MuiListItemButton: {
-          root: {
-            '&.Mui-selected': {
-              color: '#5FBB7D',
-              backgroundColor: '#F0F3F3',
+        typography: {
+          fontFamily: `'Lexend', 'Roboto', 'Helvetica', 'Arial', sans-serif`,
+        },
+        components: {
+          MuiListItemButton: {
+            styleOverrides: {
+              root: {
+                '&.Mui-selected': {
+                  color: '#5FBB7D',
+                  backgroundColor: '#F0F3F3',
+                },
+              },
             },
           },
         },
@@ -56,8 +63,8 @@ export const useMode = () => {
           },
         },
       }),
-    [mode],
-  );
+    [mode]
+  )
 
-  return [theme, colorMode];
-};
+  return [theme, colorMode]
+}

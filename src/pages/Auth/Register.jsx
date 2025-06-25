@@ -24,9 +24,9 @@ const Register = () => {
     control,
   } = useForm({
     resolver: yupResolver(registerSchema),
-    mode: 'onChange', 
+    mode: 'onChange',
     defaultValues: {
-      gender: '', 
+      gender: '',
     },
   })
 
@@ -40,8 +40,8 @@ const Register = () => {
         data.gender
       )
       console.log('Registration successful:', response)
-      alert('Đăng ký thành công! Vui lòng đăng nhập.')
-      navigate('/login')
+      alert('Đăng ký thành công! Vui lòng nhập OTP.')
+      navigate('/OTP')
     } catch (error) {
       console.error('Registration error:', error)
       alert(error.message || 'Đăng ký thất bại. Vui lòng thử lại.')

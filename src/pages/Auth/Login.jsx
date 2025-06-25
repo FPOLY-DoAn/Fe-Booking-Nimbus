@@ -10,7 +10,7 @@ import { Box, Button } from '@mui/material'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { loginSchema } from '../../validation/AuthValid'
 import LoginService from '../../services/LoginService'
-import {jwtDecode} from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -27,16 +27,20 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       const response = await LoginService(data.email, data.password)
-      const decoded = jwtDecode(response)
+      if (!response.success) {
+  throw new Error(response.message)
+}
+      // const response = await LoginService(data.email, data.password)
+      const decoded = jwtDecode(response.data)
     // console.log('Thông tin giải mã:', decoded)
     // console.log('Họ tên:', decoded.hoten)
       // Lưu token và thông tin user vào localStorage
-      localStorage.setItem('token', response) 
+      localStorage.setItem('accessToken', response.data)
       localStorage.setItem(
         'user',
         JSON.stringify({
           email: data.email,
-          hoten: decoded.hoten || 'User', 
+          hoten: decoded.hoten || 'User',
         })
       )
       navigate('/')

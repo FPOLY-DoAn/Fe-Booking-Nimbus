@@ -2,15 +2,19 @@ import axios from 'axios'
 
 const BASE_URL = 'http://localhost:2615'
 
-const RegisterService = async (hoTen, email, matKhau, soDienThoai, gioiTinh) => {
+const RegisterService = async ( hoTen,
+      email,
+      matKhau,
+      soDienThoai,
+      gioiTinh,) => {
   try {
-
     const response = await axios.post(`${BASE_URL}/auth/register`, {
       hoTen,
       email,
       matKhau,
       soDienThoai,
       gioiTinh,
+      
     })
     return response.data
   } catch (error) {
