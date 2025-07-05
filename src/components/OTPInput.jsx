@@ -136,7 +136,7 @@ const OTPInput = ({ length = 6, onComplete }) => {
         <Button
           color="primary"
           onClick={() => {
-            /* Thêm logic gửi lại mã ở đây */
+          
           }}
         >
           Gửi lại

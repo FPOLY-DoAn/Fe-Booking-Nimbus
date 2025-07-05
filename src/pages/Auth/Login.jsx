@@ -6,14 +6,24 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import Typography from '@mui/material/Typography'
 import { AuthContainer, CardCostome, CustomeTextField } from '../../components'
-import { Box, Button } from '@mui/material'
+import { Box, Button, InputAdornment, IconButton } from '@mui/material'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { loginSchema } from '../../validation/AuthValid'
 import LoginService from '../../services/LoginService'
 import { jwtDecode } from 'jwt-decode'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import { useState } from 'react'
+import MuiAlertCustom from '../../components/MuiAlertCustom'
 
 const Login = () => {
   const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false)
+  const [alert, setAlert] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+  })
 
   const {
     register, // Hàm để đăng ký các trường input
@@ -28,13 +38,9 @@ const Login = () => {
     try {
       const response = await LoginService(data.email, data.password)
       if (!response.success) {
-  throw new Error(response.message)
-}
-      // const response = await LoginService(data.email, data.password)
+        throw new Error(response.message)
+      }
       const decoded = jwtDecode(response.data)
-    // console.log('Thông tin giải mã:', decoded)
-    // console.log('Họ tên:', decoded.hoten)
-      // Lưu token và thông tin user vào localStorage
       localStorage.setItem('accessToken', response.data)
       localStorage.setItem(
         'user',
@@ -43,13 +49,26 @@ const Login = () => {
           hoten: decoded.hoten || 'User',
         })
       )
-      navigate('/')
-      alert('Đăng nhập thành công!')
+      setAlert({
+        open: true,
+        message: 'Đăng nhập thành công!',
+        severity: 'success',
+      })
+      setTimeout(() => {
+        navigate('/')
+      }, 1200)
     } catch (error) {
       console.error('Login error:', error)
-      alert(error.message || 'Đăng nhập thất bại. Vui lòng thử lại.')
+      setAlert({
+        open: true,
+        message: error.message || 'Đăng nhập thất bại. Vui lòng thử lại.',
+        severity: 'error',
+      })
     }
   }
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
+ 
 
   return (
     <>
@@ -97,12 +116,30 @@ const Login = () => {
                 error={Boolean(errors.password)}
                 helperText={errors.password?.message}
                 label="Mật khẩu"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 required
                 fullWidth
                 variant="outlined"
                 {...register('password')}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                        tabIndex={-1}
+                      >
+                        {showPassword ? (
+                          <VisibilityOff fontSize="small" />
+                        ) : (
+                          <Visibility fontSize="small" />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </FormControl>
             <FormControlLabel
@@ -134,6 +171,12 @@ const Login = () => {
           </Typography>
         </CardCostome>
       </AuthContainer>
+      <MuiAlertCustom
+        open={alert.open}
+        onClose={() => setAlert({ ...alert, open: false })}
+        severity={alert.severity}
+        message={alert.message}
+      />
     </>
   )
 }

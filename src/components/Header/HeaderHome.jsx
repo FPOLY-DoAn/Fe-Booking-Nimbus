@@ -16,6 +16,8 @@ import PersonIcon from '@mui/icons-material/Person'
 import LogoutIcon from '@mui/icons-material/Logout'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import logoNimbus from '../../assets/Nimbus.png'
+import MuiAlertCustom from '../MuiAlertCustom'
+// import MuiAlertCustom from './MuiAlertCustom'
 
 const NavButton = ({ to, children }) => (
   <Button
@@ -40,6 +42,11 @@ const HeaderHome = () => {
   const navigate = useNavigate()
   const [user, setUser] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null)
+  const [alert, setAlert] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+  })
 
   useEffect(() => {
     const userStr = localStorage.getItem('user')
@@ -60,13 +67,27 @@ const HeaderHome = () => {
     setAnchorEl(null)
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    setUser(null)
+  // const handleLogout = () => {
+  //   localStorage.removeItem('token')
+  //   localStorage.removeItem('user')
+  //   setUser(null)
+  //   handleClose()
+  //   navigate('/')
+  // }
+   const handleLogout = () => {
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('user')
+      setUser(null)
     handleClose()
-    navigate('/')
-  }
+      setAlert({
+        open: true,
+        message: 'Đăng xuất thành công!',
+        severity: 'success',
+      })
+      setTimeout(() => {
+        navigate('/')
+      }, 1200)
+    }
 
   const renderUserMenu = () => (
     <Menu
@@ -186,6 +207,12 @@ const HeaderHome = () => {
             )}
           </Box>
         </Toolbar>
+        <MuiAlertCustom
+        open={alert.open}
+        onClose={() => setAlert({ ...alert, open: false })}
+        severity={alert.severity}
+        message={alert.message}
+      />
       </Container>
     </AppBar>
   )
