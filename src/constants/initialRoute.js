@@ -1,21 +1,43 @@
-import { lazy } from "react";
-import { AdminLayout, AuthLayout, UserLayout } from "../layouts";
+import { lazy } from 'react'
+import { AdminLayout, AuthLayout, UserLayout } from '../layouts'
 
-const routes = [
-    {
-        path:'/',
-        Component: lazy(() => import('../pages/User/HomePage')),
-        Layout: UserLayout
-    },
-    {
-        path:'/login',
-        Component: lazy(() => import('../pages/Auth/Login')),
-        Layout: AuthLayout
-    },
-    {
-        path:'/admin',
-        Component: lazy(() => import('../pages/Admin/AdminPage')),
-        Layout: AdminLayout
-    }
+export const publicRoutes = [
+  {
+    path: '/',
+    element: lazy(() => import('../pages/User/HomePage')),
+    layout: UserLayout,
+  },
+  {
+    path: '/login',
+    element: lazy(() => import('../pages/Auth/Login')),
+    layout: AuthLayout,
+  },
+  {
+    path: '/register',
+    element: lazy(() => import('../pages/Auth/Register')),
+    layout: AuthLayout,
+  },
+  {
+    path: '/lich-kham',
+    element: lazy(() => import('../pages/User/Appointment')),
+    layout: UserLayout,
+  },
+  {
+    path: '/OTP',
+    element: lazy(() => import('../pages/Auth/OTP')),
+    layout: AuthLayout,
+  }
 ]
-export default routes;
+
+export const privateRoutes = [
+  {
+    path: '/admin',
+    element: lazy(() => import('../pages/Admin/Dashboard')),
+    layout: AdminLayout,
+  },
+  {
+    path: '/admin/lich-lam-viec',
+    element: lazy(() => import('../pages/Admin/WorkSchedule')),
+    layout: AdminLayout,
+  },
+]
