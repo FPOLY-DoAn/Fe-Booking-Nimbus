@@ -1,19 +1,28 @@
-import { Navigate, Outlet } from 'react-router';
+import { Navigate, Outlet } from 'react-router'
 
 const ProtectedRoute = () => {
-  // TODO: Replace this with your actual authentication check
-  // const isAuthenticated = localStorage.getItem('token');
-  // const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  // Đọc accessToken và user từ localStorage
+  const accessToken = localStorage.getItem('accessToken')
+  const userStr = localStorage.getItem('user')
+  let role = null
+  if (userStr) {
+    try {
+      role = JSON.parse(userStr).role
+    } catch {
+      role = null
+    }
+  }
 
-  // if (!isAuthenticated) {
-  //   return <Navigate to="/login" replace />;
-  // }
+  if (!accessToken) {
+    return <Navigate to="/login" replace />
+  }
 
-  // if (!isAdmin) {
-  //   return <Navigate to="/" replace />;
-  // }
+  // Chỉ cho phép admin vào route này
+  if (role !== 'admin') {
+    return <Navigate to="/" replace />
+  }
 
-  return <Outlet />;
-};
+  return <Outlet />
+}
 
-export default ProtectedRoute;
+export default ProtectedRoute

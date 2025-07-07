@@ -5,7 +5,12 @@ import CssBaseline from '@mui/material/CssBaseline'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import Typography from '@mui/material/Typography'
-import { AuthContainer, CardCostome, CustomeTextField, MuiAlertCustom } from '../../components'
+import {
+  AuthContainer,
+  CardCostome,
+  CustomeTextField,
+  MuiAlertCustom,
+} from '../../components'
 import { Box, Button, InputAdornment, IconButton } from '@mui/material'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { loginSchema } from '../../validation/AuthValid'
@@ -40,12 +45,25 @@ const Login = () => {
         throw new Error(response.message)
       }
       const decoded = jwtDecode(response.data)
+      console.log('Decoded JWT:', decoded) // Kiểm tra xem có trường role không
       localStorage.setItem('accessToken', response.data)
+      // Xác định role từ các flag boolean trong token
+      let role = 'user'
+      if (decoded.isQuanLy) {
+        role = 'admin'
+      } else if (decoded.isLeTan) {
+        role = 'receptionist'
+      } else if (decoded.isBacSi) {
+        role = 'doctor'
+      } else if (decoded.isBenhNhan) {
+        role = 'patient'
+      }
       localStorage.setItem(
         'user',
         JSON.stringify({
           email: data.email,
           hoten: decoded.hoten || 'User',
+          role,
         })
       )
       setAlert({
@@ -54,7 +72,12 @@ const Login = () => {
         severity: 'success',
       })
       setTimeout(() => {
-        navigate('/')
+        const user = JSON.parse(localStorage.getItem('user'))
+        if (user.role === 'admin') {
+          navigate('/admin')
+        } else {
+          navigate('/')
+        }
       }, 1200)
     } catch (error) {
       console.error('Login error:', error)
@@ -67,7 +90,6 @@ const Login = () => {
   }
 
   const handleClickShowPassword = () => setShowPassword((show) => !show)
- 
 
   return (
     <>
