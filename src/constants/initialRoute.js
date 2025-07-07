@@ -22,6 +22,11 @@ export const publicRoutes = [
     element: lazy(() => import('../pages/User/Appointment')),
     layout: UserLayout,
   },
+  {
+    path: '/OTP',
+    element: lazy(() => import('../pages/Auth/OTP')),
+    layout: AuthLayout,
+  }
 ]
 
 export const privateRoutes = [

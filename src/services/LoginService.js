@@ -8,7 +8,7 @@ const LoginService = async (email, matKhau) => {
       email,
       matKhau,
     })
-    console.log(response.data)
+    // console.log(response.data)
     return response.data
   }catch(error){
     console.log('Error details:', {

@@ -10,12 +10,21 @@ import Select from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import Typography from '@mui/material/Typography'
-import { AuthContainer, CardCostome, CustomeTextField } from '../../components'
+import { AuthContainer, CardCostome, CustomeTextField, MuiAlertCustom } from '../../components'
 import { registerSchema } from './../../validation/AuthValid'
 import RegisterService from '../../services/RegisterService'
+import { useState } from 'react'
+import RadioGroup from '@mui/material/RadioGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Radio from '@mui/material/Radio'
 
 const Register = () => {
   const navigate = useNavigate()
+  const [alert, setAlert] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+  })
 
   const {
     register,
@@ -24,9 +33,9 @@ const Register = () => {
     control,
   } = useForm({
     resolver: yupResolver(registerSchema),
-    mode: 'onChange', 
+    mode: 'onChange',
     defaultValues: {
-      gender: '', 
+      gender: '',
     },
   })
 
@@ -40,11 +49,21 @@ const Register = () => {
         data.gender
       )
       console.log('Registration successful:', response)
-      alert('Đăng ký thành công! Vui lòng đăng nhập.')
-      navigate('/login')
+      setAlert({
+        open: true,
+        message: response.message,
+        severity: 'success',
+      })
+      setTimeout(() => {
+        navigate('/')
+      }, 1200)
     } catch (error) {
       console.error('Registration error:', error)
-      alert(error.message || 'Đăng ký thất bại. Vui lòng thử lại.')
+      setAlert({
+        open: true,
+        message: error.message,
+        severity: 'error',
+      })
     }
   }
 
@@ -90,17 +109,33 @@ const Register = () => {
               />
             </FormControl>
             <FormControl error={Boolean(errors.gender)} fullWidth>
-              <InputLabel id="gender-label">Giới tính *</InputLabel>
-              <Controller
-                name="gender"
-                control={control}
-                render={({ field }) => (
-                  <Select {...field} labelId="gender-label" label="Giới tính *">
-                    <MenuItem value="M">Nam</MenuItem>
-                    <MenuItem value="F">Nữ</MenuItem>
-                  </Select>
-                )}
-              />
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <Typography
+                  variant="subtitle1"
+                  color="#4b6cbf"
+                  sx={{ minWidth: 90, mr: 2 }}
+                >
+                  Giới tính:
+                </Typography>
+                <Controller
+                  name="gender"
+                  control={control}
+                  render={({ field }) => (
+                    <RadioGroup row {...field}>
+                      <FormControlLabel
+                        value="M"
+                        control={<Radio />}
+                        label="Nam"
+                      />
+                      <FormControlLabel
+                        value="F"
+                        control={<Radio />}
+                        label="Nữ"
+                      />
+                    </RadioGroup>
+                  )}
+                />
+              </Box>
               {errors.gender && (
                 <FormHelperText>{errors.gender.message}</FormHelperText>
               )}
@@ -172,6 +207,12 @@ const Register = () => {
           </Box>
         </CardCostome>
       </AuthContainer>
+      <MuiAlertCustom
+        open={alert.open}
+        onClose={() => setAlert({ ...alert, open: false })}
+        severity={alert.severity}
+        message={alert.message}
+      />
     </>
   )
 }
