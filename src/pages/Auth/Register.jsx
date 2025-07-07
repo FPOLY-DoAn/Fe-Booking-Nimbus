@@ -10,10 +10,9 @@ import Select from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import Typography from '@mui/material/Typography'
-import { AuthContainer, CardCostome, CustomeTextField } from '../../components'
+import { AuthContainer, CardCostome, CustomeTextField, MuiAlertCustom } from '../../components'
 import { registerSchema } from './../../validation/AuthValid'
 import RegisterService from '../../services/RegisterService'
-import MuiAlertCustom from '../../components/MuiAlertCustom'
 import { useState } from 'react'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -50,7 +49,6 @@ const Register = () => {
         data.gender
       )
       console.log('Registration successful:', response)
-      // alert('Đăng ký thành công! Vui lòng nhập OTP.')
       setAlert({
         open: true,
         message: response.message,

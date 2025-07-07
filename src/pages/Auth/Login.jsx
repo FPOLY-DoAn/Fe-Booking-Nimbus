@@ -5,7 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import Typography from '@mui/material/Typography'
-import { AuthContainer, CardCostome, CustomeTextField } from '../../components'
+import { AuthContainer, CardCostome, CustomeTextField, MuiAlertCustom } from '../../components'
 import { Box, Button, InputAdornment, IconButton } from '@mui/material'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { loginSchema } from '../../validation/AuthValid'
@@ -14,7 +14,6 @@ import { jwtDecode } from 'jwt-decode'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { useState } from 'react'
-import MuiAlertCustom from '../../components/MuiAlertCustom'
 
 const Login = () => {
   const navigate = useNavigate()
