@@ -18,7 +18,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import logoNimbus from '../../assets/Nimbus.png'
 import MuiAlertCustom from '../MuiAlertCustom'
 
-
 const NavButton = ({ to, children }) => (
   <Button
     component={Link}
@@ -57,7 +56,32 @@ const HeaderHome = () => {
         console.error('Error parsing user data:', error)
       }
     }
-  }, [])
+    // Auto logout after 15 minutes of inactivity
+    let logoutTimer
+    const resetTimer = () => {
+      if (logoutTimer) clearTimeout(logoutTimer)
+      logoutTimer = setTimeout(
+        () => {
+          localStorage.removeItem('accessToken')
+          localStorage.removeItem('user')
+          setUser(null)
+          navigate('/')
+        },
+        15 * 60 * 1000
+      ) // 15 phút
+    }
+    // Reset timer on user activity
+    window.addEventListener('mousemove', resetTimer)
+    window.addEventListener('keydown', resetTimer)
+    window.addEventListener('click', resetTimer)
+    resetTimer()
+    return () => {
+      if (logoutTimer) clearTimeout(logoutTimer)
+      window.removeEventListener('mousemove', resetTimer)
+      window.removeEventListener('keydown', resetTimer)
+      window.removeEventListener('click', resetTimer)
+    }
+  }, [navigate])
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -67,27 +91,20 @@ const HeaderHome = () => {
     setAnchorEl(null)
   }
 
-  // const handleLogout = () => {
-  //   localStorage.removeItem('token')
-  //   localStorage.removeItem('user')
-  //   setUser(null)
-  //   handleClose()
-  //   navigate('/')
-  // }
-   const handleLogout = () => {
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('user')
-      setUser(null)
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('user')
+    setUser(null)
     handleClose()
-      setAlert({
-        open: true,
-        message: 'Đăng xuất thành công!',
-        severity: 'success',
-      })
-      setTimeout(() => {
-        navigate('/')
-      }, 1200)
-    }
+    setAlert({
+      open: true,
+      message: 'Đăng xuất thành công!',
+      severity: 'success',
+    })
+    setTimeout(() => {
+      navigate('/')
+    }, 1200)
+  }
 
   const renderUserMenu = () => (
     <Menu
@@ -208,11 +225,11 @@ const HeaderHome = () => {
           </Box>
         </Toolbar>
         <MuiAlertCustom
-        open={alert.open}
-        onClose={() => setAlert({ ...alert, open: false })}
-        severity={alert.severity}
-        message={alert.message}
-      />
+          open={alert.open}
+          onClose={() => setAlert({ ...alert, open: false })}
+          severity={alert.severity}
+          message={alert.message}
+        />
       </Container>
     </AppBar>
   )

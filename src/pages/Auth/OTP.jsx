@@ -14,26 +14,7 @@ const OTP = () => {
     severity: 'success',
   })
 
-  // useEffect(() => {
-    // Kiểm tra trạng thái xác nhận đăng ký
-  //   const isPendingOTP = localStorage.getItem('pendingOTP')
-  //   const alerted = sessionStorage.getItem('alertedOTP')
-  //   if (!isPendingOTP && !alerted) {
-  //     window.alert(
-  //       'Bạn cần đăng ký tài khoản trước khi xác thực OTP. Vui lòng đăng ký tài khoản.'
-  //     )
-  //     sessionStorage.setItem('alertedOTP', 'true')
-  //     // Nếu không có flag, chuyển hướng về trang đăng ký
-  //     navigate('/register')
-  //   }
-  // }, [navigate])
-
-  // useEffect(() => {
-  //   // Xóa flag khi vào lại trang OTP đúng quy trình
-  //   if (localStorage.getItem('pendingOTP')) {
-  //     sessionStorage.removeItem('alertedOTP')
-  //   }
-  // }, [])
+  
 
   const handleOTPComplete = async (otp) => {
     try {

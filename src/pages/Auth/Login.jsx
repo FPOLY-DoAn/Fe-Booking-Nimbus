@@ -66,11 +66,29 @@ const Login = () => {
           role,
         })
       )
-      setAlert({
-        open: true,
-        message: 'Đăng nhập thành công!',
-        severity: 'success',
-      })
+      // setAlert({
+      //   open: true,
+      //   message: 'Đăng nhập thành công!',
+      //   severity: 'success',
+      // })
+      if (role === 'admin') {
+        setAlert({
+          open: true,
+          message: (
+            <>
+              Chào mừng bạn quay lại, <b>{decoded.hoten || 'Admin'}</b>! <br />
+              Đang đưa bạn đến trang quản lý...
+            </>
+          ),
+          severity: 'success',
+        })
+      } else {
+        setAlert({
+          open: true,
+          message: `Đăng nhập thành công! Chào mừng ${decoded.hoten || 'bạn'}!`,
+          severity: 'success',
+        })
+      }
       setTimeout(() => {
         const user = JSON.parse(localStorage.getItem('user'))
         if (user.role === 'admin') {
@@ -78,7 +96,7 @@ const Login = () => {
         } else {
           navigate('/')
         }
-      }, 1200)
+      }, 1800)
     } catch (error) {
       console.error('Login error:', error)
       setAlert({

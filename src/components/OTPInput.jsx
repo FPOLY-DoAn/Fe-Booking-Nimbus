@@ -18,16 +18,31 @@ const StyledTextField = styled(TextField)`
   }
 `
 
-const OTPInput = ({ length = 6, onComplete }) => {
+const OTPInput = ({ length = 6, onComplete, otpTimeout = 60 }) => {
   const [otp, setOtp] = useState(new Array(length).fill(''))
   const inputRefs = useRef([])
+  const [counter, setCounter] = useState(otpTimeout) // giây
+  const [canResend, setCanResend] = useState(false)
 
   useEffect(() => {
     // Focus vào ô đầu tiên khi component mount
     if (inputRefs.current[0]) {
       inputRefs.current[0].focus()
     }
-  }, [])
+    setCounter(otpTimeout)
+    setCanResend(false)
+  }, [otpTimeout])
+
+  useEffect(() => {
+    if (counter <= 0) {
+      setCanResend(true)
+      return
+    }
+    const timer = setInterval(() => {
+      setCounter((prev) => prev - 1)
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [counter])
 
   const handleChange = (index, e) => {
     const value = e.target.value
@@ -94,13 +109,22 @@ const OTPInput = ({ length = 6, onComplete }) => {
     }
   }
 
+  // Cho phép gửi lại bất cứ lúc nào
+  const handleResend = () => {
+    setOtp(new Array(length).fill(''))
+    setCounter(otpTimeout)
+    setCanResend(false)
+    if (inputRefs.current[0]) inputRefs.current[0].focus()
+    // TODO: Gọi API gửi lại OTP ở đây nếu cần
+  }
+
   return (
     <Box sx={{ textAlign: 'center', p: 3 }}>
       <Typography variant="h5" gutterBottom>
         Nhập mã OTP
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        Vui lòng nhập mã OTP đã được gửi đến số điện thoại của bạn
+        Vui lòng nhập mã OTP đã được gửi đến email của bạn
       </Typography>
 
       <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
@@ -118,15 +142,23 @@ const OTPInput = ({ length = 6, onComplete }) => {
               maxLength: 1,
               style: { textAlign: 'center' },
             }}
+            disabled={canResend}
           />
         ))}
       </Box>
+
+      <Typography color={canResend ? 'error' : 'primary'} sx={{ mb: 2 }}>
+        {canResend
+          ? 'Mã OTP đã hết hạn. Vui lòng gửi lại mã.'
+          : `Mã OTP sẽ hết hạn sau: ${Math.floor(counter / 60)}:${('0' + (counter % 60)).slice(-2)}`}
+      </Typography>
 
       <Button
         variant="contained"
         onClick={handleVerify}
         fullWidth
         sx={{ mt: 2 }}
+        disabled={canResend}
       >
         Xác nhận
       </Button>
@@ -135,9 +167,9 @@ const OTPInput = ({ length = 6, onComplete }) => {
         Không nhận được mã?{' '}
         <Button
           color="primary"
-          onClick={() => {
-          
-          }}
+          // Cho phép gửi lại bất cứ lúc nào
+          disabled={false}
+          onClick={handleResend}
         >
           Gửi lại
         </Button>
