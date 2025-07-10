@@ -10,19 +10,22 @@ import {
   Typography,
   useTheme,
   IconButton,
-} from '@mui/material';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { Outlet, useNavigate, useLocation } from 'react-router';
-import { useState } from 'react';
-import logoNimbus from '../../assets/Nimbus.png';
-import logoNimbusDark from '../../assets/Nimbus_Dark.png';
-import ThemeSwitcher from '../../components/ThemeSwitcher';
+  Divider,
+} from '@mui/material'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
+import MenuIcon from '@mui/icons-material/Menu'
+import GroupIcon from '@mui/icons-material/Group'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import { Outlet, useNavigate, useLocation } from 'react-router'
+import { useState } from 'react'
+import logoNimbus from '../../assets/Nimbus.png'
+import logoNimbusDark from '../../assets/Nimbus_Dark.png'
+import ThemeSwitcher from '../../components/ThemeSwitcher'
+import UserMenu from '../../components/UserMenu'
 
-const DRAWER_WIDTH = 240;
-const DRAWER_COLLAPSED_WIDTH = 65;
+const DRAWER_WIDTH = 240
+const DRAWER_COLLAPSED_WIDTH = 65
 
 const NAVIGATION_ITEMS = [
   {
@@ -35,17 +38,41 @@ const NAVIGATION_ITEMS = [
     title: 'Work Schedule',
     icon: <CalendarMonthIcon />,
   },
-];
+  {
+    path: '/admin/quan-ly-bac-si',
+    title: 'List Doctors',
+    icon: <GroupIcon />,
+  },
+]
 
 const AdminLayout = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const theme = useTheme();
-  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+  const navigate = useNavigate()
+  const location = useLocation()
+  const theme = useTheme()
+  const [isDrawerOpen, setIsDrawerOpen] = useState(true)
+  const [admin, setAdmin] = useState(() => {
+    const userStr = localStorage.getItem('user')
+    if (userStr)
+      try {
+        return JSON.parse(userStr)
+      } catch {
+        return null
+      }
+    return null
+  })
 
   const handleDrawerToggle = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-  };
+    setIsDrawerOpen(!isDrawerOpen)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('user')
+    navigate('/login')
+  }
+  const handleProfile = () => {
+    navigate('/admin/profile')
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -68,7 +95,32 @@ const AdminLayout = () => {
           <Typography variant="h6" noWrap component="div">
             Admin Dashboard
           </Typography>
-          <ThemeSwitcher />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <ThemeSwitcher />
+            <UserMenu
+              user={admin}
+              onLogout={handleLogout}
+              onProfile={handleProfile}
+              profileLabel="Chỉnh sửa hồ sơ"
+              showName={false}
+              avatarSx={{ width: 36, height: 36, bgcolor: '#1976d2' }}
+              menuItems={[
+                {
+                  label: 'Lịch đã huỷ',
+                  icon: <DashboardIcon fontSize="small" />,
+                  onClick: () => navigate('/admin/lich-da-huy'),
+                },
+                {
+                  divider: true,
+                },
+                {
+                  label: 'Lịch làm việc',
+                  icon: <CalendarMonthIcon fontSize="small" />,
+                  onClick: () => navigate('/admin/lich-lam-viec'),
+                },
+              ]}
+            />
+          </Box>
         </Toolbar>
       </AppBar>
       {/* Sidebar */}
@@ -176,7 +228,7 @@ const AdminLayout = () => {
         <Outlet />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default AdminLayout;
+export default AdminLayout

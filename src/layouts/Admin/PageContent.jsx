@@ -11,7 +11,7 @@ const PageContent = ({ children }) => {
         textAlign: 'center',
       }}
     >
-      {/* <Typography>Dashboard content for {pathname}</Typography> */}
+      
       {children}
     </Box>
   );
