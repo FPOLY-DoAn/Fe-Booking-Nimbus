@@ -137,7 +137,7 @@ const doctors = [
     id: 8,
     name: 'BS. Lê Thị H',
     avatar: '',
-    specialty: 'Nội tiết',
+    specialty: 'Nhi Khoa',
     schedule: {
       'Thứ 2': 'Chiều',
       'Thứ 3': 'Sáng',
@@ -317,7 +317,7 @@ const doctors = [
     id: 20,
     name: 'BS. Đỗ Thị U',
     avatar: '',
-    specialty: 'Thận tiết niệu',
+    specialty: 'Thần kinh',
     schedule: {
       'Thứ 2': 'Chiều',
       'Thứ 3': 'Chiều',
@@ -359,10 +359,21 @@ const WorkSchedule = () => {
   const [date, setDate] = useState(dayjs())
 
   // Lấy danh sách chuyên khoa duy nhất
+  // Lấy danh sách chuyên khoa duy nhất, chuẩn hóa về chữ thường, không dấu
+  function removeVietnameseTones(str) {
+    return str
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .replace(/đ/g, 'd')
+      .replace(/Đ/g, 'D')
+  }
   const specialties = useMemo(() => {
-    const set = new Set()
-    doctors.forEach((d) => set.add(d.specialty))
-    return Array.from(set)
+    const map = new Map()
+    doctors.forEach((d) => {
+      const key = removeVietnameseTones(d.specialty.toLowerCase())
+      if (!map.has(key)) map.set(key, d.specialty)
+    })
+    return Array.from(map.values())
   }, [])
 
   // Lấy danh sách ca duy nhất
@@ -395,13 +406,18 @@ const WorkSchedule = () => {
   }, [shiftFilter])
 
   // Lọc bác sĩ có ca phù hợp trong các ngày đang hiển thị
+  // Search gần đúng tên bác sĩ (không dấu, không phân biệt hoa thường)
   const filteredDoctors = useMemo(() => {
+    function normalize(str) {
+      return removeVietnameseTones(str.toLowerCase().trim())
+    }
     return doctors.filter((doctor) => {
-      // Search theo tên
-      if (search && !doctor.name.toLowerCase().includes(search.toLowerCase()))
+      // Search theo tên gần đúng
+      if (search && !normalize(doctor.name).includes(normalize(search)))
         return false
-      // Lọc theo chuyên khoa
-      if (specialty && doctor.specialty !== specialty) return false
+      // Lọc theo chuyên khoa (so sánh chuẩn hóa)
+      if (specialty && normalize(doctor.specialty) !== normalize(specialty))
+        return false
       // Lọc theo ngày
       if (dayFilter && !doctor.schedule[dayFilter]) return false
       // Lọc theo ca: bác sĩ phải có ca này ở ít nhất 1 ngày đang hiển thị
@@ -546,8 +562,6 @@ const WorkSchedule = () => {
                 const dateObj = weekDates[days.indexOf(day)]
                 const isToday = dateObj.isSame(dayjs(), 'day')
                 const isSelected = dayFilter === day
-                // --- Highlight border for header (ngày hôm nay/ngày filter) ---
-                // const highlightBorder = ... (đã bỏ border để clean code)
                 return (
                   <TableCell
                     key={day}
@@ -555,7 +569,6 @@ const WorkSchedule = () => {
                     sx={{
                       fontWeight: 600,
                       minWidth: 110,
-                      // border: highlightBorder, // ĐÃ BỎ border nét đứt cho header
                       background: isToday
                         ? theme.palette.mode === 'dark'
                           ? '#1e293b'
@@ -601,14 +614,11 @@ const WorkSchedule = () => {
                   const dateObj = weekDates[days.indexOf(day)]
                   const isToday = dateObj.isSame(dayjs(), 'day')
                   const isSelected = dayFilter === day
-                  // --- Highlight border for body cell (ngày hôm nay/ngày filter) ---
-                  // const highlightBorder = ... (đã bỏ border để clean code)
                   return (
                     <TableCell
                       key={day}
                       align="center"
                       sx={{
-                        // border: highlightBorder, // ĐÃ BỎ border nét đứt cho cell body
                         background: isToday
                           ? theme.palette.mode === 'dark'
                             ? '#1e293b'
