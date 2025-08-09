@@ -5,19 +5,13 @@ import {
   Container,
   Toolbar,
   Button,
-  Menu,
-  MenuItem,
-  Avatar,
   Divider,
   ListItemIcon,
 } from '@mui/material'
 import { useState, useEffect } from 'react'
-import PersonIcon from '@mui/icons-material/Person'
-import LogoutIcon from '@mui/icons-material/Logout'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import logoNimbus from '../../assets/Nimbus.png'
 import MuiAlertCustom from '../MuiAlertCustom'
-
+import UserMenu from '../UserMenu'
 
 const NavButton = ({ to, children }) => (
   <Button
@@ -41,7 +35,6 @@ const NavButton = ({ to, children }) => (
 const HeaderHome = () => {
   const navigate = useNavigate()
   const [user, setUser] = useState(null)
-  const [anchorEl, setAnchorEl] = useState(null)
   const [alert, setAlert] = useState({
     open: false,
     message: '',
@@ -57,75 +50,47 @@ const HeaderHome = () => {
         console.error('Error parsing user data:', error)
       }
     }
-  }, [])
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
-  // const handleLogout = () => {
-  //   localStorage.removeItem('token')
-  //   localStorage.removeItem('user')
-  //   setUser(null)
-  //   handleClose()
-  //   navigate('/')
-  // }
-   const handleLogout = () => {
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('user')
-      setUser(null)
-    handleClose()
-      setAlert({
-        open: true,
-        message: 'Đăng xuất thành công!',
-        severity: 'success',
-      })
-      setTimeout(() => {
-        navigate('/')
-      }, 1200)
-    }
-
-  const renderUserMenu = () => (
-    <Menu
-      anchorEl={anchorEl}
-      open={Boolean(anchorEl)}
-      onClose={handleClose}
-      PaperProps={{
-        sx: {
-          mt: 1,
-          width: 250,
-          borderRadius: 2,
-          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
+    // Auto logout after 15 minutes of inactivity
+    let logoutTimer
+    const resetTimer = () => {
+      if (logoutTimer) clearTimeout(logoutTimer)
+      logoutTimer = setTimeout(
+        () => {
+          localStorage.removeItem('accessToken')
+          localStorage.removeItem('user')
+          setUser(null)
+          navigate('/')
         },
-      }}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      disablePortal
-    >
-      <MenuItem
-        onClick={handleClose}
-        component={Link}
-        to="/profile"
-        sx={{ gap: 2 }}
-      >
-        <ListItemIcon>
-          <PersonIcon fontSize="small" />
-        </ListItemIcon>
-        Thông tin cá nhân
-      </MenuItem>
-      <Divider />
-      <MenuItem onClick={handleLogout} sx={{ gap: 2, color: 'error.main' }}>
-        <ListItemIcon>
-          <LogoutIcon fontSize="small" color="error" />
-        </ListItemIcon>
-        Đăng xuất
-      </MenuItem>
-    </Menu>
-  )
+        15 * 60 * 1000
+      ) // 15 phút
+    }
+    // Reset timer on user activity
+    window.addEventListener('mousemove', resetTimer)
+    window.addEventListener('keydown', resetTimer)
+    window.addEventListener('click', resetTimer)
+    resetTimer()
+    return () => {
+      if (logoutTimer) clearTimeout(logoutTimer)
+      window.removeEventListener('mousemove', resetTimer)
+      window.removeEventListener('keydown', resetTimer)
+      window.removeEventListener('click', resetTimer)
+    }
+  }, [navigate])
+
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('user')
+    setUser(null)
+    setAlert({
+      open: true,
+      message: 'Đăng xuất thành công!',
+      severity: 'success',
+    })
+    setTimeout(() => {
+      setAlert((prev) => ({ ...prev, open: false }))
+      navigate('/')
+    }, 1200)
+  }
 
   return (
     <AppBar
@@ -153,40 +118,18 @@ const HeaderHome = () => {
 
             {/* User Menu or Login Button */}
             {user ? (
-              <>
-                <Button
-                  onClick={handleClick}
-                  endIcon={<KeyboardArrowDownIcon />}
-                  sx={{
-                    textTransform: 'none',
-                    color: '#333',
-                    fontSize: '16px',
-                    fontWeight: 500,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1,
-                    px: 1,
-                    minWidth: 'unset',
-                    '&:hover': {
-                      color: '#1976d2',
-                      backgroundColor: 'transparent',
-                    },
-                  }}
-                >
-                  <Avatar
-                    sx={{
-                      width: 32,
-                      height: 32,
-                      bgcolor: '#1976d2',
-                      fontSize: '1rem',
-                    }}
-                  >
-                    {(user.hoten || 'U')[0].toUpperCase()}
-                  </Avatar>
-                  {user.hoten || 'User'}
-                </Button>
-                {renderUserMenu()}
-              </>
+              <UserMenu
+                user={user}
+                onLogout={handleLogout}
+                onProfile={() => navigate('/profile')}
+                showName={true}
+                avatarSx={{
+                  width: 32,
+                  height: 32,
+                  bgcolor: '#1976d2',
+                  fontSize: '1rem',
+                }}
+              />
             ) : (
               <Button
                 variant="contained"
@@ -208,11 +151,11 @@ const HeaderHome = () => {
           </Box>
         </Toolbar>
         <MuiAlertCustom
-        open={alert.open}
-        onClose={() => setAlert({ ...alert, open: false })}
-        severity={alert.severity}
-        message={alert.message}
-      />
+          open={alert.open}
+          onClose={() => setAlert({ ...alert, open: false })}
+          severity={alert.severity}
+          message={alert.message}
+        />
       </Container>
     </AppBar>
   )

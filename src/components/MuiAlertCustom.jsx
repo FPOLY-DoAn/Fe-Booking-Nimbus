@@ -12,7 +12,7 @@ const MuiAlertCustom = ({
   severity = 'info',
   message = '',
   autoHideDuration = 3000,
-  anchorOrigin = { vertical: 'top', horizontal: 'right' },
+  anchorOrigin = { vertical: 'top', horizontal: 'center' },
 }) => {
   return (
     <Snackbar

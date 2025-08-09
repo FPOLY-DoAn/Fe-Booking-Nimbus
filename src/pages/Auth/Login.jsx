@@ -5,7 +5,12 @@ import CssBaseline from '@mui/material/CssBaseline'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import Typography from '@mui/material/Typography'
-import { AuthContainer, CardCostome, CustomeTextField, MuiAlertCustom } from '../../components'
+import {
+  AuthContainer,
+  CardCostome,
+  CustomeTextField,
+  MuiAlertCustom,
+} from '../../components'
 import { Box, Button, InputAdornment, IconButton } from '@mui/material'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { loginSchema } from '../../validation/AuthValid'
@@ -40,22 +45,58 @@ const Login = () => {
         throw new Error(response.message)
       }
       const decoded = jwtDecode(response.data)
+      console.log('Decoded JWT:', decoded) // Kiểm tra xem có trường role không
       localStorage.setItem('accessToken', response.data)
+      // Xác định role từ các flag boolean trong token
+      let role = 'user'
+      if (decoded.isQuanLy) {
+        role = 'admin'
+      } else if (decoded.isLeTan) {
+        role = 'receptionist'
+      } else if (decoded.isBacSi) {
+        role = 'doctor'
+      } else if (decoded.isBenhNhan) {
+        role = 'patient'
+      }
       localStorage.setItem(
         'user',
         JSON.stringify({
           email: data.email,
           hoten: decoded.hoten || 'User',
+          role,
         })
       )
-      setAlert({
-        open: true,
-        message: 'Đăng nhập thành công!',
-        severity: 'success',
-      })
+      // setAlert({
+      //   open: true,
+      //   message: 'Đăng nhập thành công!',
+      //   severity: 'success',
+      // })
+      if (role === 'admin') {
+        setAlert({
+          open: true,
+          message: (
+            <>
+              Chào mừng bạn quay lại, <b>{decoded.hoten || 'Admin'}</b>! <br />
+              Đang đưa bạn đến trang quản lý...
+            </>
+          ),
+          severity: 'success',
+        })
+      } else {
+        setAlert({
+          open: true,
+          message: `Đăng nhập thành công! Chào mừng ${decoded.hoten || 'bạn'}!`,
+          severity: 'success',
+        })
+      }
       setTimeout(() => {
-        navigate('/')
-      }, 1200)
+        const user = JSON.parse(localStorage.getItem('user'))
+        if (user.role === 'admin') {
+          navigate('/admin')
+        } else {
+          navigate('/')
+        }
+      }, 1800)
     } catch (error) {
       console.error('Login error:', error)
       setAlert({
@@ -67,7 +108,6 @@ const Login = () => {
   }
 
   const handleClickShowPassword = () => setShowPassword((show) => !show)
- 
 
   return (
     <>

@@ -5,18 +5,24 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
 import FormControl from '@mui/material/FormControl'
-import MenuItem from '@mui/material/MenuItem'
-import Select from '@mui/material/Select'
-import InputLabel from '@mui/material/InputLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import Typography from '@mui/material/Typography'
-import { AuthContainer, CardCostome, CustomeTextField, MuiAlertCustom } from '../../components'
+import {
+  AuthContainer,
+  CardCostome,
+  CustomeTextField,
+  MuiAlertCustom,
+} from '../../components'
 import { registerSchema } from './../../validation/AuthValid'
 import RegisterService from '../../services/RegisterService'
 import { useState } from 'react'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import InputAdornment from '@mui/material/InputAdornment'
+import IconButton from '@mui/material/IconButton'
 
 const Register = () => {
   const navigate = useNavigate()
@@ -25,6 +31,12 @@ const Register = () => {
     message: '',
     severity: 'success',
   })
+  const [showPassword, setShowPassword] = useState(false)
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
+  const handleClickShowPasswordConfirm = () =>
+    setShowPasswordConfirm((show) => !show)
 
   const {
     register,
@@ -55,7 +67,7 @@ const Register = () => {
         severity: 'success',
       })
       setTimeout(() => {
-        navigate('/')
+        navigate('/OTP')
       }, 1200)
     } catch (error) {
       console.error('Registration error:', error)
@@ -171,12 +183,30 @@ const Register = () => {
                 error={Boolean(errors.password)}
                 helperText={errors.password?.message}
                 label="Mật khẩu"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="new-password"
                 required
                 fullWidth
                 variant="outlined"
                 {...register('password')}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                        tabIndex={-1}
+                      >
+                        {showPassword ? (
+                          <VisibilityOff fontSize="small" />
+                        ) : (
+                          <Visibility fontSize="small" />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </FormControl>
             <FormControl>
@@ -184,12 +214,30 @@ const Register = () => {
                 error={Boolean(errors.passwordconfirm)}
                 helperText={errors.passwordconfirm?.message}
                 label="Xác nhận mật khẩu"
-                type="password"
+                type={showPasswordConfirm ? 'text' : 'password'}
                 autoComplete="new-password"
                 required
                 fullWidth
                 variant="outlined"
                 {...register('passwordconfirm')}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPasswordConfirm}
+                        edge="end"
+                        tabIndex={-1}
+                      >
+                        {showPasswordConfirm ? (
+                          <VisibilityOff fontSize="small" />
+                        ) : (
+                          <Visibility fontSize="small" />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </FormControl>
 

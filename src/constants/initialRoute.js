@@ -40,4 +40,9 @@ export const privateRoutes = [
     element: lazy(() => import('../pages/Admin/WorkSchedule')),
     layout: AdminLayout,
   },
+  {
+    path: '/admin/quan-ly-bac-si',
+    element: lazy(() => import('../pages/Admin/ListDoctor')), 
+    layout: AdminLayout,
+  }
 ]
